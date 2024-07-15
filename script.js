@@ -9,69 +9,102 @@ function getComputerChoice() {
     }
 }
 
-function getHumanChoice() {
-    let choice = prompt("Enter Rock, Paper or Scissors to play: ");
-    if (choice === null) {
-        console.log("Player cancelled");
-        return;
-    }
-    choice = choice.toLowerCase();
-    if (choice === "rock") {
-        console.log(choice);
-        return "rock";
-    } else if (choice === "paper") {
-        console.log(choice);
-        return "paper";
-    } else if (choice === "scissors") {
-        console.log(choice);
-        return "scissors";
-    } else {
-        getHumanChoice();
-    }
-}
-
 let humanScore = 0;
 let computerScore = 0;
 
 function playRound(getHumanChoice, getComputerChoice) {
+    let result = document.querySelector("#result");
     if (getHumanChoice === undefined) {
         return;
     }
-    if (getComputerChoice === "rock") {
-        if (getHumanChoice === "rock") {
-            console.log("Tie! Current human score: " + humanScore + ". Current computer score: " + computerScore);
-        } else if (getHumanChoice === "paper") {
-            humanScore++;
-            console.log("You Win! Paper beats Rock! Current human score: " + humanScore + ". Current computer score: " + computerScore);
-        } else {
-            computerScore++;
-            console.log("You Lose! Rock beats Scissors! Current human score: " + humanScore + ". Current computer score: " + computerScore);
-        }
-    } else if (getComputerChoice === "paper") {
-        if (getHumanChoice === "rock") {
-            computerScore++;
-            console.log("You Lose! Paper beats Rock! Current human score: " + humanScore + ". Current computer score: " + computerScore);
-        } else if (getHumanChoice === "paper") {
-            console.log("Tie! Current human score: " + humanScore + ". Current computer score: " + computerScore);
-        } else {
-            humanScore++;
-            console.log("You Win! Scissors beats paper! Current human score: " + humanScore + ". Current computer score: " + computerScore);
-        }
-    } else {
-        if (getHumanChoice === "rock") {
-            humanScore++;
-            console.log("You Win! Rock beats Scissors! Current human score: " + humanScore + ". Current computer score: " + computerScore);
-        } else if (getHumanChoice === "paper") {
-            computerScore++;
-            console.log("You Lose! Paper beats Rock! Current human score: " + humanScore + ". Current computer score: " + computerScore);
-        } else {
-            console.log("Tie! Current human score: " + humanScore + ". Current computer score: " + computerScore);
-        }
+    switch(getHumanChoice) {
+        case "rock":
+            switch (getComputerChoice) {
+                case "rock":
+                    result.textContent = "Human: " + getHumanChoice + ", Computer: " + getComputerChoice + 
+                    ". Tie! Current human score: " + humanScore + ". Current computer score: " + computerScore + ".";
+                    break;
+                case "paper":
+                    computerScore++;
+                    result.textContent = "Human: " + getHumanChoice + ", Computer: " + getComputerChoice + 
+                    ". Computer wins! Current human score: " + humanScore + ". Current computer score: " + computerScore + ".";
+                    break;
+                case "scissors":
+                    humanScore++;
+                    result.textContent = "Human: " + getHumanChoice + ", Computer: " + getComputerChoice + 
+                    ". Human wins! Current human score: " + humanScore + ". Current computer score: " + computerScore + ".";
+                    break;
+                default:
+                    console.log("What happened?");
+            }
+            break;
+        case "paper":
+            switch (getComputerChoice) {
+                case "rock":
+                    humanScore++;
+                    result.textContent = "Human: " + getHumanChoice + ", Computer: " + getComputerChoice + 
+                    ". Human wins! Current human score: " + humanScore + ". Current computer score: " + computerScore + ".";
+                    break;
+                case "paper":
+                    result.textContent = "Human: " + getHumanChoice + ", Computer: " + getComputerChoice + 
+                    ". Tie! Current human score: " + humanScore + ". Current computer score: " + computerScore + ".";
+                    break;
+                case "scissors":
+                    computerScore++;
+                    result.textContent = "Human: " + getHumanChoice + ", Computer: " + getComputerChoice + 
+                    ". Computer wins! Current human score: " + humanScore + ". Current computer score: " + computerScore + ".";
+                    break;
+                default:
+                    console.log("What happened?");
+            }
+            break;
+        case "scissors":
+            switch (getComputerChoice) {
+                case "rock":
+                    computerScore++;
+                    result.textContent = "Human: " + getHumanChoice + ", Computer: " + getComputerChoice + 
+                    ". Computer wins! Current human score: " + humanScore + ". Current computer score: " + computerScore + ".";
+                    break;
+                case "paper":
+                    humanScore++;
+                    result.textContent = "Human: " + getHumanChoice + ", Computer: " + getComputerChoice + 
+                    ". Human wins! Current human score: " + humanScore + ". Current computer score: " + computerScore + ".";
+                    break;
+                case "scissors":
+                    result.textContent = "Human: " + getHumanChoice + ", Computer: " + getComputerChoice + 
+                    ". Tie! Current human score: " + humanScore + ". Current computer score: " + computerScore + ".";
+                    break;
+                default:
+                    console.log("What happened?");
+            }
+            break;
+        default:
+            console.log("What happened?");
+    }
+    if (humanScore === 5) {
+        result.textContent = "Human wins the game! Human vs. computer: " + humanScore + " vs. " + computerScore + ".";
+        rock.disabled = true;
+        paper.disabled = true;
+        scissors.disabled = true;
+    } else if (computerScore === 5) {
+        result.textContent = "Computer wins the game! Human vs. computer: " + humanScore + " vs. " + computerScore + ".";
+        rock.disabled = true;
+        paper.disabled = true;
+        scissors.disabled = true;
     }
 }
 
-function playGame() {
-    for (let i = 0; i < 5; i++) {
-        playRound(getHumanChoice(), getComputerChoice());
+const rock = document.querySelector("#rock");
+const paper = document.querySelector("#paper");
+const scissors = document.querySelector("#scissors");
+const container = document.querySelector("#container");
+
+let getHumanChoice;
+
+container.addEventListener("click", (e) => {
+    if (e.target.nodeName === "BUTTON") {
+        getHumanChoice = e.target.id;
+        console.log(getHumanChoice);
     }
-}
+    playRound(getHumanChoice, getComputerChoice());
+});
